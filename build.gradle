@@ -1,0 +1,113 @@
+plugins {
+	id 'org.springframework.boot' version '2.5.2'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'application'
+	id 'eclipse'
+}
+
+group = 'hashimotonet'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '8'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+ }
+
+eclipse {
+    pathVariables 'GRADLE_USER_HOME': gradle.gradleUserHomeDir
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+ 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	annotationProcessor 'org.projectlombok:lombok'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+	// https://mvnrepository.com/artifact/commons-codec/commons-codec
+	implementation group: 'commons-codec', name: 'commons-codec', version: '1.15'
+	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.4'
+	runtimeOnly 'mysql:mysql-connector-java'
+	implementation("org.springframework.boot:spring-boot-starter-log4j2")
+	// https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils
+	// https://mvnrepository.com/artifact/jstl/jstl
+	implementation group: 'jstl', name: 'jstl', version: '1.2'
+	// https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-jasper
+	implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: '10.0.22'
+	
+	// https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j
+	implementation group: 'org.apache.logging.log4j', name: 'log4j', version: '2.20.0'
+	
+	// https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+	compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+	
+	
+
+configurations {
+    instrumentedJars {
+        canBeResolved = true
+    }
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+ }
+
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+ 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	annotationProcessor 'org.projectlombok:lombok'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+	// https://mvnrepository.com/artifact/commons-codec/commons-codec
+	implementation group: 'commons-codec', name: 'commons-codec', version: '1.15'
+	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.4'
+	runtimeOnly 'mysql:mysql-connector-java'
+	implementation("org.springframework.boot:spring-boot-starter-log4j2")
+	// https://mvnrepository.com/artifact/jstl/jstl
+	implementation group: 'jstl', name: 'jstl', version: '1.2'
+	// https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-jasper
+	implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: '10.0.22'
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.7.1'
+
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+	compileOnly group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+
+}
+}
+
+jar {
+    manifest {
+        attributes('Main-Class': 'Application')
+    }
+    jar.into('lib') {
+        //from configurations.runtimeOnly
+    }
+}

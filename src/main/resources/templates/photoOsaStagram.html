@@ -1,0 +1,156 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="css/bootstrap.css" />
+  <style>
+html, body, #canvas {
+  display: block;
+  text-align: center;
+  /* line-height: normal; */
+  height: 90%;
+  width: 90vw;
+}
+    </style>
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+
+let image = new Image();
+
+//alert("test1");
+
+$(() => {
+  let canvas = $('#canvas')[0];
+  let context = canvas.getContext('2d');
+
+  $('#file_choice').on('change', (e) => {
+    let file = e.target.files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = () => {
+      image.src = reader.result;
+    }
+
+  image.onload = () => {
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+  }
+
+  });
+
+
+});
+</script>
+</head>
+<body>
+<div class="input_area">
+  <input type="file" id="file_choice" class="btn btn-primary btn-sm"><br>
+  <!--  <input type="hidden" id="id" name="id" value="<%= request.getAttribute("id") %>" /> -->
+  <input type="hidden" id="id" name="id" value="hashimoto" />
+</div>
+<canvas id="canvas" width="320" height="480"></canvas><br>
+<button type="button" id="btn-send" class="btn btn-primary btn-sm">サーバへ保存</button>
+<script type="text/javascript">
+ //---------------------------------------------
+ // 定数定義
+ //---------------------------------------------
+ // 保存を行うプログラムがあるURL
+ const SAVE_URL = 'Upload';
+//---------------------------------------------
+//[event] ページ読み込み完了
+//---------------------------------------------
+window.onload = ()=>{
+
+    //---------------------------------------------
+    // 保存ボタンが押されたらサーバへ送信する
+    //---------------------------------------------
+    let canvas = document.getElementById("canvas").toDataURL("image/png");  // DataURI Schemaが返却される
+    //alert(canvas);
+	if (canvas == null) {
+	    document.getElementById("btn-send").style = none;
+	}
+    document.querySelector("#btn-send").addEventListener("click", ()=>{
+      canvas = document.getElementById("canvas").toDataURL("image/png");  // DataURI Schemaが返却される
+
+      alert("サーバー送信処理");
+
+      // Canvasなどのデータを取得
+      const id =document.getElementById("id").value;
+      const alt="";
+      
+      const json = {
+    		  "id":id,
+    		  "alt":alt,
+    		  "data":canvas
+      };
+      
+      //alert(eval(json));
+
+      // 送信情報の設定
+      const param  = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        //body: JSON.stringify({data: canvas})
+        body: JSON.stringify(json)
+      };
+
+      alert(param);
+
+      // サーバへ送信
+      sendServer(SAVE_URL, param);
+    });
+
+   document.querySelector("#btn-disp").addEventListener("click", ()=>{
+	   document.frm.action="ListImages";
+	   document.frm.method="post";
+	   document.frm.submit();
+   });
+
+};
+
+
+  /**
+   * 半角英数チェック。
+  */
+  function checkLettersPermitted(str){
+    str = (str==null)?"":str;
+    if(str.match(/^[a-zA-Z0-9!-/:-@¥[-`{-~\s]*$/)){
+    	return true;
+    }else{
+	    return false;
+	  }
+  }
+
+  /**
+   * サーバへJSON送信
+   *
+   * @param url   {string} 送信先URL
+   * @param param {object} fetchオプション
+   */
+  function sendServer(url, param){
+    fetch(url, param)
+      .then((response)=>{
+        return response;
+      })
+      .then((response)=>{
+        if(response.status){
+          alert("送信に『成功』しました");
+          //setImage(json.result);    //json.resultにはファイル名が入っている
+        }
+        else{
+      	  console.log(response.status);
+          alert("送信に『失敗』しました");
+          console.log(`[error1] ${json.result}`);
+        }
+      })
+      .catch((error)=>{
+        alert("送信に『失敗』しました");
+        console.log(`[error2] ${error}`);
+      });
+  }
+</script>
+</body>
+</html>
